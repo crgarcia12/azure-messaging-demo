@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SenderApp.Models;
+using SenderApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,10 +14,12 @@ namespace SenderApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -25,6 +29,8 @@ namespace SenderApp.Controllers
 
         public IActionResult Privacy()
         {
+            ServiceBusService service = new ServiceBusService(_logger, _configuration);
+            service.SendMessageAsync();
             return View();
         }
 
