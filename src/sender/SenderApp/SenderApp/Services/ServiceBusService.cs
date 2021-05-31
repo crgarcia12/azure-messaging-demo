@@ -29,8 +29,6 @@ namespace SenderApp.Services
 
         public async Task SendMessageAsync()
         {
-            int messagesToSend = 20;
-            MessagesSent += messagesToSend;
             using (new PerformanceScope(_logger, nameof(SendMessageAsync)))
             {
                 // create a Service Bus client 
@@ -39,16 +37,17 @@ namespace SenderApp.Services
                     // create a sender for the queue 
                     ServiceBusSender sender = client.CreateSender(_queueName);
 
-                    for (int i = 0; i < messagesToSend; i++)
+                    while(true)
                     {
-                        using (new PerformanceScope(_logger, $"Sending message " + i))
+                        using (new PerformanceScope(_logger, $"Sending message"))
                         {
                             // create a message that we can send
                             ServiceBusMessage message = new ServiceBusMessage(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
                             // send the message
                             await sender.SendMessageAsync(message);
-                            _logger.LogInformation($"Message sent: " + i);
+                            MessagesSent++;
+                            _logger.LogInformation($"Message sent: " + MessagesSent);
                         }
                     }
                 }
