@@ -27,10 +27,13 @@ namespace SenderApp.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
             ServiceBusService service = new ServiceBusService(_logger, _configuration);
-            service.SendMessageAsync();
+            await service.SendMessageAsync();
+
+            ViewData["MessgaesCounter"] = ServiceBusService.MessagesSent;
+
             return View();
         }
 

@@ -10,6 +10,8 @@ namespace SenderApp.Services
 {
     public class ServiceBusService
     {
+        public static int MessagesSent { get; private set; } = 0;
+
         private string _connectionString;
         private string _queueName;
         private ILogger _logger;
@@ -27,6 +29,8 @@ namespace SenderApp.Services
 
         public async Task SendMessageAsync()
         {
+            int messagesToSend = 20;
+            MessagesSent += messagesToSend;
             using (this._logger.BeginScope(nameof(SendMessageAsync)))
             {
                 // create a Service Bus client 
@@ -35,7 +39,7 @@ namespace SenderApp.Services
                     // create a sender for the queue 
                     ServiceBusSender sender = client.CreateSender(_queueName);
 
-                    for (int i = 0; i < 1000; i++)
+                    for (int i = 0; i < messagesToSend; i++)
                     {
                         using (_logger.BeginScope($"Sending message " + i))
                         {
@@ -45,6 +49,8 @@ namespace SenderApp.Services
                             // send the message
                             await sender.SendMessageAsync(message);
 
+                            _logger.LogCritical($"Message LogCritical sent: " + i);
+                            _logger.LogWarning($"Message LogWarning sent: " + i);
                             _logger.LogInformation($"Message sent: " + i );
                         }
                     }
