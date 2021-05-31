@@ -15,7 +15,9 @@ env:
 
 jobs:
   build-and-deploy:
-    working-directory: ./src/receiver/
+    defaults:
+        run:
+          working-directory: ./src/receiver
     runs-on: windows-latest
     steps:
     - name: 'Checkout GitHub Action'
