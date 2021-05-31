@@ -44,7 +44,7 @@ namespace SenderApp.Services
                         using (new PerformanceScope(_logger, $"Sending message " + i))
                         {
                             // create a message that we can send
-                            ServiceBusMessage message = new ServiceBusMessage("Hello world!");
+                            ServiceBusMessage message = new ServiceBusMessage(DateTime.UtcNow.ToLongTimeString());
 
                             // send the message
                             await sender.SendMessageAsync(message);
