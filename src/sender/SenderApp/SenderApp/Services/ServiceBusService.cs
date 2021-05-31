@@ -31,7 +31,7 @@ namespace SenderApp.Services
         {
             int messagesToSend = 20;
             MessagesSent += messagesToSend;
-            using (this._logger.BeginScope(nameof(SendMessageAsync)))
+            using (new PerformanceScope(_logger, nameof(SendMessageAsync)))
             {
                 // create a Service Bus client 
                 await using (ServiceBusClient client = new ServiceBusClient(_connectionString))
@@ -41,17 +41,14 @@ namespace SenderApp.Services
 
                     for (int i = 0; i < messagesToSend; i++)
                     {
-                        using (_logger.BeginScope($"Sending message " + i))
+                        using (new PerformanceScope(_logger, $"Sending message " + i))
                         {
                             // create a message that we can send
                             ServiceBusMessage message = new ServiceBusMessage("Hello world!");
 
                             // send the message
                             await sender.SendMessageAsync(message);
-
-                            _logger.LogCritical($"Message LogCritical sent: " + i);
-                            _logger.LogWarning($"Message LogWarning sent: " + i);
-                            _logger.LogInformation($"Message sent: " + i );
+                            _logger.LogInformation($"Message sent: " + i);
                         }
                     }
                 }
