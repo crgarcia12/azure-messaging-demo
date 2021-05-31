@@ -10,6 +10,9 @@ on:
 
 jobs:
   build-and-deploy:
+    defaults:
+        run:
+          working-directory: ./src/sender/SenderApp
     runs-on: windows-latest
 
     steps:
