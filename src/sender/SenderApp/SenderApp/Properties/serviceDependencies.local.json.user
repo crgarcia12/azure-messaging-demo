@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2021-05-31T09:36:42.0708279Z"
+    },
+    "appInsights1": {
+      "restored": true,
+      "restoreTime": "2021-05-31T09:37:04.8160502Z"
+    }
+  },
+  "parameters": {
+    "appInsights1.subscriptionId": {
+      "Name": "appInsights1.subscriptionId",
+      "Type": "subscription",
+      "Value": "930c11b0-5e6d-458f-b9e3-f3dda0734110"
+    },
+    "appInsights1.resourceGroupName": {
+      "Name": "appInsights1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "crgar-messaging-demo-rg"
+    }
+  }
+}
