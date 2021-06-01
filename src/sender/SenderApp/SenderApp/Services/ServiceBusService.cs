@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Logging;
+using System.Threading;
 
 namespace SenderApp.Services
 {
@@ -27,7 +28,7 @@ namespace SenderApp.Services
             Throw.IsNullOrWhiteSpace(nameof(_queueName), _queueName);
         }
 
-        public async Task SendMessageAsync()
+        public async Task SendMessageAsync(CancellationToken token, int numberOfMessages)
         {
             using (new PerformanceScope(_logger, nameof(SendMessageAsync)))
             {
@@ -37,7 +38,7 @@ namespace SenderApp.Services
                     // create a sender for the queue 
                     ServiceBusSender sender = client.CreateSender(_queueName);
 
-                    while(true)
+                    while(!token.IsCancellationRequested && numberOfMessages-- != 0)
                     {
                         using (new PerformanceScope(_logger, $"Sending message"))
                         {
@@ -45,7 +46,7 @@ namespace SenderApp.Services
                             ServiceBusMessage message = new ServiceBusMessage(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
                             // send the message
-                            await sender.SendMessageAsync(message);
+                            //await sender.SendMessageAsync(message, token);
                             MessagesSent++;
                             _logger.LogInformation($"Message sent: " + MessagesSent);
                         }

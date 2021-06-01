@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SenderApp.Controllers
@@ -16,7 +17,8 @@ namespace SenderApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
 
-        public static Task _continuousMessageSender;
+        private static List<Task> _continuousMessageSender = new List<Task>();
+        private CancellationTokenSource _cancelationTokenSource;
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
@@ -26,19 +28,36 @@ namespace SenderApp.Controllers
 
         public IActionResult Index()
         {
-            if(_continuousMessageSender == null)
-            {
-                ServiceBusService service = new ServiceBusService(_logger, _configuration);
-                _continuousMessageSender = service.SendMessageAsync();
-
-            }
+            ViewData["MessagesCounter"] = ServiceBusService.MessagesSent;
+            ViewData["RunningSenders"] = _continuousMessageSender.Count;
             return View();
+        }
+
+        public async Task<IActionResult> SendServiceBusMessages(int count)
+        {
+            if (count == 0 && _cancelationTokenSource != null)
+            {
+                _cancelationTokenSource.Cancel();
+                _cancelationTokenSource = null;
+                await Task.WhenAll(_continuousMessageSender);
+
+                _continuousMessageSender = new List<Task>();
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
+            if (_cancelationTokenSource == null)
+            {
+                _cancelationTokenSource = new CancellationTokenSource();
+            }
+            CancellationToken token = _cancelationTokenSource.Token;
+            var service = new ServiceBusService(_logger, _configuration);
+            _continuousMessageSender.Add(service.SendMessageAsync(token, count));
+
+            return RedirectToAction(nameof(Index), "Home");
         }
 
         public async Task<IActionResult> Privacy()
         {
-            ViewData["MessgaesCounter"] = ServiceBusService.MessagesSent;
-
             return View();
         }
 
