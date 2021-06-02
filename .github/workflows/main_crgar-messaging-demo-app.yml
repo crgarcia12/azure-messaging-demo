@@ -7,12 +7,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ./src/msg-sender
 
 jobs:
   build-and-deploy:
     defaults:
         run:
-          working-directory: ./src/sender/SenderApp
+          working-directory: ./src/msg-sender/SenderApp
     runs-on: windows-latest
 
     steps:
