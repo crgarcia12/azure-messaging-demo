@@ -10,7 +10,7 @@ namespace receiver
         [FunctionName("receiver")]
         public static void Run([ServiceBusTrigger("messagesqueue", Connection = "ServiceBusConnectionString")]string myQueueItem, ILogger log)
         {   
-            //Comment3
+            //Comment4
             log.LogInformation($"[QueueMessage];{myQueueItem};{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
         }
     }
