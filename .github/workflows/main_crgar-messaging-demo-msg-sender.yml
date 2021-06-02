@@ -7,8 +7,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - './src/msg-sender/**'
 
 jobs:
   build-and-deploy:
