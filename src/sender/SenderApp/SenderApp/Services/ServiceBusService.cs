@@ -46,7 +46,7 @@ namespace SenderApp.Services
                             ServiceBusMessage message = new ServiceBusMessage(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
                             // send the message
-                            //await sender.SendMessageAsync(message, token);
+                            await sender.SendMessageAsync(message, token);
                             MessagesSent++;
                             _logger.LogInformation($"Message sent: " + MessagesSent);
                         }
