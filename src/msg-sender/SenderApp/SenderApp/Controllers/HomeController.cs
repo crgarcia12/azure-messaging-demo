@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SenderApp.Controllers
 {
-    //Comment
+    //Comment2
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
