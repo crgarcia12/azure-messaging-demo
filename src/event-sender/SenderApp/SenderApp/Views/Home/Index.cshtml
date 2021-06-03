@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Messages sent: @ViewData["MessagesCounter"] messages. Current Senders: @ViewData["RunningSenders"]</h1>
+
+ <input type="button"
+         value="Start message pump"
+         onclick="location.href='@Url.Action("SendServiceBusMessages", "Home", new { count = -1})'" />
+ <input type="button"
+         value="Stop message pump"
+         onclick="location.href='@Url.Action("SendServiceBusMessages", "Home", new { count = 0})'" />
+ <input type="button"
+         value="Send 100 messages"
+         onclick="location.href='@Url.Action("SendServiceBusMessages", "Home", new { count = 100})'" />
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
