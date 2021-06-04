@@ -9,7 +9,8 @@ on:
       - main
     paths:
       - 'src/msg-sender/**'      
-
+  workflow_dispatch:
+  
 jobs:
   build-and-deploy:
     defaults:
