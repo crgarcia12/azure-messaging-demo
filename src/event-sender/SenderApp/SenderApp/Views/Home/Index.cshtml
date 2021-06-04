@@ -6,13 +6,13 @@
 
  <input type="button"
          value="Start message pump"
-         onclick="location.href='@Url.Action("SendServiceBusMessages", "Home", new { count = -1})'" />
+         onclick="location.href='@Url.Action("SendEventHubMessages", "Home", new { count = -1})'" />
  <input type="button"
          value="Stop message pump"
-         onclick="location.href='@Url.Action("SendServiceBusMessages", "Home", new { count = 0})'" />
+         onclick="location.href='@Url.Action("SendEventHubMessages", "Home", new { count = 0})'" />
  <input type="button"
          value="Send 100 messages"
-         onclick="location.href='@Url.Action("SendServiceBusMessages", "Home", new { count = 100})'" />
+         onclick="location.href='@Url.Action("SendEventHubMessages", "Home", new { count = 100})'" />
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>

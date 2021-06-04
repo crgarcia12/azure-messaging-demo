@@ -18,7 +18,7 @@ namespace SenderApp.Controllers
         private readonly IConfiguration _configuration;
 
         private static List<Task> _continuousMessageSender = new List<Task>();
-        private CancellationTokenSource _cancelationTokenSource;
+        private static CancellationTokenSource _cancelationTokenSource;
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
@@ -33,7 +33,7 @@ namespace SenderApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> SendServiceBusMessages(int count)
+        public async Task<IActionResult> SendEventHubMessages(int count)
         {
             if (count == 0 && _cancelationTokenSource != null)
             {
