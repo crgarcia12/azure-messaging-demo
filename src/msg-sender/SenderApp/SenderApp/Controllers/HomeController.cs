@@ -35,20 +35,23 @@ namespace SenderApp.Controllers
 
         public async Task<IActionResult> SendServiceBusMessages(int count)
         {
-            if (count == 0 && _cancelationTokenSource != null)
+            if (count == 0)
             {
-                _cancelationTokenSource.Cancel();
-                _cancelationTokenSource = null;
-                await Task.WhenAll(_continuousMessageSender);
-
-                _continuousMessageSender = new List<Task>();
+                if (_cancelationTokenSource != null)
+                {
+                    _cancelationTokenSource.Cancel();
+                    _cancelationTokenSource = null;
+                    await Task.WhenAll(_continuousMessageSender);
+                }
                 return RedirectToAction(nameof(Index), "Home");
             }
 
             if (_cancelationTokenSource == null)
             {
                 _cancelationTokenSource = new CancellationTokenSource();
+                _continuousMessageSender = new List<Task>();
             }
+            
             CancellationToken token = _cancelationTokenSource.Token;
             var service = new ServiceBusService(_logger, _configuration);
             _continuousMessageSender.Add(service.SendMessageAsync(token, count));
