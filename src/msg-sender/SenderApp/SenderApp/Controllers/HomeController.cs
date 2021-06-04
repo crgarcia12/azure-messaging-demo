@@ -29,7 +29,7 @@ namespace SenderApp.Controllers
         public IActionResult Index()
         {
             ViewData["MessagesCounter"] = ServiceBusService.MessagesSent;
-            ViewData["RunningSenders"] = _continuousMessageSender.Count;
+            ViewData["RunningSenders"] = _continuousMessageSender?.Count ?? 0;
             return View();
         }
 
@@ -40,8 +40,9 @@ namespace SenderApp.Controllers
                 if (_cancelationTokenSource != null)
                 {
                     _cancelationTokenSource.Cancel();
-                    _cancelationTokenSource = null;
                     await Task.WhenAll(_continuousMessageSender);
+                    _continuousMessageSender = null;
+                    _cancelationTokenSource = null;
                 }
                 return RedirectToAction(nameof(Index), "Home");
             }
@@ -51,7 +52,7 @@ namespace SenderApp.Controllers
                 _cancelationTokenSource = new CancellationTokenSource();
                 _continuousMessageSender = new List<Task>();
             }
-            
+
             CancellationToken token = _cancelationTokenSource.Token;
             var service = new ServiceBusService(_logger, _configuration);
             _continuousMessageSender.Add(service.SendMessageAsync(token, count));

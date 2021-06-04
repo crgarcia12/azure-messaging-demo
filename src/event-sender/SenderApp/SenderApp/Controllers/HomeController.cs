@@ -29,7 +29,7 @@ namespace SenderApp.Controllers
         public IActionResult Index()
         {
             ViewData["MessagesCounter"] = EventHubService.MessagesSent;
-            ViewData["RunningSenders"] = _continuousMessageSender.Count;
+            ViewData["RunningSenders"] = _continuousMessageSender?.Count ?? 0;
             return View();
         }
 
@@ -40,8 +40,9 @@ namespace SenderApp.Controllers
                 if (_cancelationTokenSource != null)
                 {
                     _cancelationTokenSource.Cancel();
-                    _cancelationTokenSource = null;
                     await Task.WhenAll(_continuousMessageSender);
+                    _continuousMessageSender = null;
+                    _cancelationTokenSource = null;
                 }
                 return RedirectToAction(nameof(Index), "Home");
             }
