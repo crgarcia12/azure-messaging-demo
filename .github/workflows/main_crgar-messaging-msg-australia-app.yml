@@ -34,6 +34,6 @@ jobs:
       with:
         app-name: crgar-messaging-msg-australia-app
         slot-name: Production
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ABD40EE14B42489FB73EB5E2741FCB2B }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8ED983A4A9E2431890BBD71E0E522E6D }}
         package: ${{env.DOTNET_ROOT}}/myapp
 
